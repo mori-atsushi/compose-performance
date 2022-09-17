@@ -1,35 +1,35 @@
 package com.moriatsushi.performance.mutablelist
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MutableListScreen(
+fun MutableLazyListScreen(
     modifier: Modifier = Modifier
 ) {
     val list = remember { mutableStateListOf<String>() }
 
-    Column(
+    LazyColumn(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
     ) {
-        AddButton(
-            onClick = { list.add(0, "Item: ${list.size + 1}") }
-        )
-        list.forEach {
-            key(it) {
-                Item(label = it)
-            }
+        item {
+            AddButton(
+                onClick = { list.add(0, "Item: ${list.size + 1}") }
+            )
+        }
+        items(
+            items = list,
+            key = { it }
+        ) {
+            Item(label = it)
         }
     }
 }
