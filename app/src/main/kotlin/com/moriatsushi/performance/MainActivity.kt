@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
-import com.moriatsushi.performance.drag.DragScreen
+import com.moriatsushi.performance.mutablelist.MutableListScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                DragScreen()
+                MutableListScreen()
             }
         }
     }
