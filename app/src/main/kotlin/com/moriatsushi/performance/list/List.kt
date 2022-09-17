@@ -20,7 +20,9 @@ private val items = List(100) {
 }
 
 @Composable
-fun List() {
+fun ListScreen(
+    modifier: Modifier = Modifier
+) {
     val listState = rememberLazyListState()
     val isTop = listState.firstVisibleItemIndex == 0 &&
             listState.firstVisibleItemScrollOffset == 0
