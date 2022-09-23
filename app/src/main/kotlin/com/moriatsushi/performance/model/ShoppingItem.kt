@@ -8,7 +8,8 @@ data class ShoppingItem(
     val id: String,
     val name: String,
     val count: Int,
-    val added: Date
+    val added: Date,
+    val checked: Boolean
 ) {
     companion object {
         fun create(
@@ -19,7 +20,8 @@ data class ShoppingItem(
                 id = UUID.randomUUID().toString(),
                 name = name,
                 count = count,
-                added = Date()
+                added = Date(),
+                checked = false,
             )
         }
     }
@@ -30,5 +32,9 @@ data class ShoppingItem(
 
     fun decrease(): ShoppingItem {
         return copy(count = max(count - 1, 0))
+    }
+
+    fun changeChecked(checked: Boolean): ShoppingItem {
+        return copy(checked = checked)
     }
 }

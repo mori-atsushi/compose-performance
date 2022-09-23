@@ -2,9 +2,7 @@ package com.moriatsushi.performance.ui.component
 
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -22,14 +20,19 @@ fun ShoppingItemRow(
     item: ShoppingItem,
     onClickIncrease: () -> Unit,
     onClickDecrease: () -> Unit,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Checkbox(
+            checked = item.checked,
+            onCheckedChange = onCheckedChange
+        )
         Column(
             modifier = Modifier.weight(1F)
         ) {
@@ -45,7 +48,7 @@ fun ShoppingItemRow(
             )
         }
         Spacer(modifier = Modifier.width(4.dp))
-        Button(onClick = onClickDecrease) {
+        IconButton(onClick = onClickDecrease) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 imageVector = Icons.Default.Remove,
@@ -54,13 +57,12 @@ fun ShoppingItemRow(
         }
         Box(
             modifier = Modifier
-                .padding(horizontal = 8.dp)
                 .widthIn(min = 32.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(text = item.count.formatted())
         }
-        Button(onClick = onClickIncrease) {
+        IconButton(onClick = onClickIncrease) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 imageVector = Icons.Default.Add,

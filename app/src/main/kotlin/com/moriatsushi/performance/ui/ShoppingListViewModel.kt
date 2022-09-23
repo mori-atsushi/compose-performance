@@ -41,6 +41,18 @@ class ShoppingListViewModel : ViewModel() {
         }
     }
 
+    fun changeChecked(item: ShoppingItem, checked: Boolean) {
+        _list.update { list ->
+            list.map {
+                if (it.id == item.id) {
+                    it.changeChecked(checked)
+                } else {
+                    it
+                }
+            }
+        }
+    }
+
     fun add(name: String, count: Int) {
         val new = ShoppingItem.create(
             name = name,

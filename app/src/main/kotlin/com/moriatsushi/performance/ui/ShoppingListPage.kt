@@ -51,6 +51,9 @@ fun ShoppingListPage(
         onClickDecrease = {
             viewModel.decrease(it)
         },
+        onCheckedChange = { item, checked ->
+            viewModel.changeChecked(item, checked)
+        },
         onClickAdd = {
             isVisibleAddDialog = true
         },
@@ -64,6 +67,7 @@ fun ShoppingListPage(
     addDialogValues: AddDialogValues?,
     onClickIncrease: (ShoppingItem) -> Unit,
     onClickDecrease: (ShoppingItem) -> Unit,
+    onCheckedChange: (ShoppingItem, Boolean) -> Unit,
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -88,6 +92,7 @@ fun ShoppingListPage(
             list = list,
             onClickIncrease = onClickIncrease,
             onClickDecrease = onClickDecrease,
+            onCheckedChange = onCheckedChange,
             modifier = Modifier.weight(1F),
             listState = listState,
         )
@@ -126,6 +131,7 @@ private fun ShoppingListContent(
     list: List<ShoppingItem>,
     onClickIncrease: (ShoppingItem) -> Unit,
     onClickDecrease: (ShoppingItem) -> Unit,
+    onCheckedChange: (ShoppingItem, Boolean) -> Unit,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState()
 ) {
@@ -134,14 +140,17 @@ private fun ShoppingListContent(
             .fillMaxWidth(),
         state = listState
     ) {
-        items(list) {
+        items(list) { item ->
             ShoppingItemRow(
-                item = it,
+                item = item,
                 onClickIncrease = {
-                    onClickIncrease(it)
+                    onClickIncrease(item)
                 },
                 onClickDecrease = {
-                    onClickDecrease(it)
+                    onClickDecrease(item)
+                },
+                onCheckedChange = {
+                    onCheckedChange(item, it)
                 }
             )
         }
