@@ -16,12 +16,14 @@ import java.util.*
 @Composable
 fun ShoppingItemRow(
     item: ShoppingItem,
+    onClickIncrease: () -> Unit,
+    onClickDecrease: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
@@ -39,7 +41,7 @@ fun ShoppingItemRow(
             )
         }
         Spacer(modifier = Modifier.width(4.dp))
-        Button(onClick = { }) {
+        Button(onClick = onClickDecrease) {
             Text(text = "-")
         }
         Box(
@@ -50,7 +52,7 @@ fun ShoppingItemRow(
         ) {
             Text(text = item.count.formatted())
         }
-        Button(onClick = { }) {
+        Button(onClick = onClickIncrease) {
             Text(text = "+")
         }
     }

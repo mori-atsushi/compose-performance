@@ -11,22 +11,37 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moriatsushi.performance.model.ShoppingItem
 import com.moriatsushi.performance.ui.component.ShoppingItemRow
-import java.util.*
 
-private val items = List(100) {
-    ShoppingItem(
-        name = "Item:$it",
-        count = it,
-        added = Date()
+@Composable
+fun ShoppingListPage(
+    modifier: Modifier = Modifier,
+    viewModel: ShoppingListViewModel = viewModel()
+) {
+    val list by viewModel.list.collectAsState()
+    ShoppingListPage(
+        list = list,
+        onClickIncrease = {
+            viewModel.increase(it)
+        },
+        onClickDecrease = {
+            viewModel.decrease(it)
+        },
+        modifier = modifier,
     )
 }
 
 @Composable
 fun ShoppingListPage(
+    list: List<ShoppingItem>,
+    onClickIncrease: (ShoppingItem) -> Unit,
+    onClickDecrease: (ShoppingItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -54,9 +69,15 @@ fun ShoppingListPage(
                 .fillMaxWidth(),
             state = listState
         ) {
-            items(items) {
+            items(list) {
                 ShoppingItemRow(
-                    item = it
+                    item = it,
+                    onClickIncrease = {
+                        onClickIncrease(it)
+                    },
+                    onClickDecrease = {
+                        onClickDecrease(it)
+                    }
                 )
             }
         }
