@@ -41,9 +41,10 @@ class ShoppingListViewModel : ViewModel() {
         }
     }
 
-    fun add(name: String) {
+    fun add(name: String, count: Int) {
         val new = ShoppingItem.create(
             name = name,
+            count = count,
         )
         _list.update { list ->
             list.toMutableList()

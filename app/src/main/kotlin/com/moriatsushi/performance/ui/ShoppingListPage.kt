@@ -33,8 +33,8 @@ fun ShoppingListPage(
             onDismissRequest = {
                 isVisibleAddDialog = false
             },
-            onAddRequest = {
-                viewModel.add(it)
+            onAddRequest = { name, count ->
+                viewModel.add(name, count)
                 isVisibleAddDialog = false
             }
         )

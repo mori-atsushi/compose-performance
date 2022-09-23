@@ -3,10 +3,7 @@ package com.moriatsushi.performance.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -14,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import kotlin.math.roundToInt
 
 @Composable
 fun AddDialog(
@@ -39,6 +37,16 @@ fun AddDialog(
                     Text(text = "Name")
                 }
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Count: ${values.count.roundToInt()}",
+                fontSize = 16.sp,
+            )
+            Slider(
+                value = values.count,
+                onValueChange = { values.onChangeCount(it) },
+                valueRange = 1f..12f
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
@@ -53,19 +61,18 @@ fun AddDialog(
 @Composable
 fun rememberAddDialogValues(
     onDismissRequest: () -> Unit,
-    onAddRequest: (name: String) -> Unit
+    onAddRequest: (name: String, count: Int) -> Unit
 ): AddDialogValues {
     var name by rememberSaveable { mutableStateOf("") }
+    var count by rememberSaveable { mutableStateOf(1f) }
 
-    return remember(name, onDismissRequest, onAddRequest) {
+    return remember(name, count, onDismissRequest, onAddRequest) {
         AddDialogValues(
             name = name,
-            onChangeName = {
-                name = it
-            },
-            onClickAdd = {
-                onAddRequest(name)
-            },
+            count = count,
+            onChangeName = { name = it },
+            onChangeCount = { count = it },
+            onClickAdd = { onAddRequest(name, count.roundToInt()) },
             onDismissRequest = onDismissRequest
         )
     }
@@ -73,7 +80,9 @@ fun rememberAddDialogValues(
 
 data class AddDialogValues(
     val name: String,
+    val count: Float,
     val onChangeName: (String) -> Unit,
+    val onChangeCount: (Float) -> Unit,
     val onClickAdd: () -> Unit,
     val onDismissRequest: () -> Unit,
 )
