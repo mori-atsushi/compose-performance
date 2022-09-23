@@ -1,10 +1,9 @@
-package com.moriatsushi.performance.list
+package com.moriatsushi.performance.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,13 +13,20 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.moriatsushi.performance.model.ShoppingItem
+import com.moriatsushi.performance.ui.component.ShoppingItemRow
+import java.util.*
 
 private val items = List(100) {
-    "Item:$it"
+    ShoppingItem(
+        name = "Item:$it",
+        count = it,
+        added = Date()
+    )
 }
 
 @Composable
-fun ListScreen(
+fun ShoppingListPage(
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -28,13 +34,20 @@ fun ListScreen(
             listState.firstVisibleItemScrollOffset == 0
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
-        ListTopAppBar(
-            enabledShadow = isTop
-        )
+        TopAppBar(
+            modifier = modifier,
+            backgroundColor = MaterialTheme.colors.background,
+            elevation = if (isTop) 0.dp else 4.dp
+        ) {
+            Text(
+                text = "List Sample",
+                color = MaterialTheme.colors.onBackground
+            )
+        }
         LazyColumn(
             modifier = Modifier
                 .weight(1F)
@@ -42,39 +55,10 @@ fun ListScreen(
             state = listState
         ) {
             items(items) {
-                Item(label = it)
+                ShoppingItemRow(
+                    item = it
+                )
             }
         }
     }
-
-    // It is intentionally slowed down for performance verification
-    Thread.sleep(50)
-}
-
-@Composable
-private fun ListTopAppBar(
-    modifier: Modifier = Modifier,
-    enabledShadow: Boolean = false
-) {
-    TopAppBar(
-        modifier = modifier,
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = if (enabledShadow) 0.dp else 4.dp
-    ) {
-        Text(
-            text = "List Sample",
-            color = MaterialTheme.colors.onBackground
-        )
-    }
-}
-
-@Composable
-private fun Item(
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        modifier = modifier.padding(16.dp),
-        text = label
-    )
 }
