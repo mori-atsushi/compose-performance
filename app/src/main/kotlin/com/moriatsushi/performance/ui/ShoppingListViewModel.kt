@@ -40,4 +40,15 @@ class ShoppingListViewModel : ViewModel() {
             }
         }
     }
+
+    fun add(name: String) {
+        val new = ShoppingItem.create(
+            name = name,
+        )
+        _list.update { list ->
+            list.toMutableList()
+                .apply { add(0, new) }
+                .toList()
+        }
+    }
 }

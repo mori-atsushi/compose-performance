@@ -13,7 +13,7 @@ data class ShoppingItem(
     companion object {
         fun create(
             name: String,
-            count: Int
+            count: Int = 1
         ): ShoppingItem {
             return ShoppingItem(
                 id = UUID.randomUUID().toString(),
