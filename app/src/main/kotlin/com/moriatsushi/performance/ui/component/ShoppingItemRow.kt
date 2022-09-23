@@ -3,7 +3,11 @@ package com.moriatsushi.performance.ui.component
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +46,11 @@ fun ShoppingItemRow(
         }
         Spacer(modifier = Modifier.width(4.dp))
         Button(onClick = onClickDecrease) {
-            Text(text = "-")
+            Icon(
+                modifier = Modifier.size(16.dp),
+                imageVector = Icons.Default.Remove,
+                contentDescription = "Decrease"
+            )
         }
         Box(
             modifier = Modifier
@@ -53,7 +61,11 @@ fun ShoppingItemRow(
             Text(text = item.count.formatted())
         }
         Button(onClick = onClickIncrease) {
-            Text(text = "+")
+            Icon(
+                modifier = Modifier.size(16.dp),
+                imageVector = Icons.Default.Add,
+                contentDescription = "Increase"
+            )
         }
     }
 }
