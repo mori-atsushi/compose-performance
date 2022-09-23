@@ -3,7 +3,6 @@ package com.moriatsushi.performance.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
@@ -74,6 +73,7 @@ fun ShoppingListPage(
     val listState = rememberLazyListState()
     val isTop = listState.firstVisibleItemIndex == 0 &&
             listState.firstVisibleItemScrollOffset == 0
+    val sorted = list.sorted()
 
     if (addDialogValues != null) {
         AddDialog(addDialogValues)
@@ -88,14 +88,26 @@ fun ShoppingListPage(
             elevation = if (isTop) 0.dp else 4.dp,
             onClickAdd = onClickAdd,
         )
-        ShoppingListContent(
-            list = list,
-            onClickIncrease = onClickIncrease,
-            onClickDecrease = onClickDecrease,
-            onCheckedChange = onCheckedChange,
-            modifier = Modifier.weight(1F),
-            listState = listState,
-        )
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth(),
+            state = listState
+        ) {
+            items(sorted) { item ->
+                ShoppingItemRow(
+                    item = item,
+                    onClickIncrease = {
+                        onClickIncrease(item)
+                    },
+                    onClickDecrease = {
+                        onClickDecrease(item)
+                    },
+                    onCheckedChange = {
+                        onCheckedChange(item, it)
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -126,34 +138,12 @@ private fun ShoppingListTopAppBar(
     )
 }
 
-@Composable
-private fun ShoppingListContent(
-    list: List<ShoppingItem>,
-    onClickIncrease: (ShoppingItem) -> Unit,
-    onClickDecrease: (ShoppingItem) -> Unit,
-    onCheckedChange: (ShoppingItem, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState()
-) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth(),
-        state = listState
-    ) {
-        items(list) { item ->
-            ShoppingItemRow(
-                item = item,
-                onClickIncrease = {
-                    onClickIncrease(item)
-                },
-                onClickDecrease = {
-                    onClickDecrease(item)
-                },
-                onCheckedChange = {
-                    onCheckedChange(item, it)
-                }
-            )
-        }
-    }
+private fun List<ShoppingItem>.sorted(): List<ShoppingItem> {
+    return sortedWith(
+        compareBy(
+            { it.checked },
+            { -it.added.time }
+        )
+    )
 }
 
