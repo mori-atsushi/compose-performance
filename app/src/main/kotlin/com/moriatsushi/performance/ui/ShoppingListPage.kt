@@ -89,8 +89,7 @@ fun ShoppingListPage(
             onClickAdd = onClickAdd,
         )
         LazyColumn(
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             state = listState
         ) {
             items(sorted) { item ->
