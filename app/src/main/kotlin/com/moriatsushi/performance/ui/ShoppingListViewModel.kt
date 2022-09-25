@@ -1,5 +1,6 @@
 package com.moriatsushi.performance.ui
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import com.moriatsushi.performance.model.ShoppingItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,8 +27,9 @@ private val initialList = List(100) {
     )
 }.flatten()
 
+@Stable
 class ShoppingListViewModel : ViewModel() {
-    private val _list = MutableStateFlow(initialList)
+    private val _list = MutableStateFlow(initialList.sorted())
     val list: StateFlow<List<ShoppingItem>> = _list
 
     fun increase(item: ShoppingItem) {
@@ -56,13 +58,15 @@ class ShoppingListViewModel : ViewModel() {
 
     fun changeChecked(item: ShoppingItem, checked: Boolean) {
         _list.update { list ->
-            list.map {
-                if (it.id == item.id) {
-                    it.changeChecked(checked)
-                } else {
-                    it
+            list
+                .map {
+                    if (it.id == item.id) {
+                        it.changeChecked(checked)
+                    } else {
+                        it
+                    }
                 }
-            }
+                .sorted()
         }
     }
 
@@ -75,6 +79,16 @@ class ShoppingListViewModel : ViewModel() {
             list.toMutableList()
                 .apply { add(0, new) }
                 .toList()
+                .sorted()
         }
+    }
+
+    private fun List<ShoppingItem>.sorted(): List<ShoppingItem> {
+        return sortedWith(
+            compareBy(
+                { it.checked },
+                { -it.added.time }
+            )
+        )
     }
 }

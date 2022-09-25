@@ -1,9 +1,11 @@
 package com.moriatsushi.performance.model
 
+import androidx.compose.runtime.Immutable
 import java.util.Date
 import java.util.UUID
 import kotlin.math.max
 
+@Immutable
 data class ShoppingItem(
     val id: String,
     val name: String,

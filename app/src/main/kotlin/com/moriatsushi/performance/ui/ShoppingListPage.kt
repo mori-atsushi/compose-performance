@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moriatsushi.performance.model.ShoppingItem
 import com.moriatsushi.performance.ui.component.AddDialog
-import com.moriatsushi.performance.ui.component.AddDialogValues
+import com.moriatsushi.performance.ui.component.AddDialogState
 import com.moriatsushi.performance.ui.component.ShoppingItemRow
 import com.moriatsushi.performance.ui.component.rememberAddDialogValues
 
@@ -63,7 +63,7 @@ fun ShoppingListPage(
 @Composable
 fun ShoppingListPage(
     list: List<ShoppingItem>,
-    addDialogValues: AddDialogValues?,
+    addDialogValues: AddDialogState?,
     onClickIncrease: (ShoppingItem) -> Unit,
     onClickDecrease: (ShoppingItem) -> Unit,
     onCheckedChange: (ShoppingItem, Boolean) -> Unit,
@@ -71,12 +71,21 @@ fun ShoppingListPage(
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
-    val isTop = listState.firstVisibleItemIndex == 0 &&
-            listState.firstVisibleItemScrollOffset == 0
-    val sorted = list.sorted()
+    val isTop by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex == 0 &&
+                    listState.firstVisibleItemScrollOffset == 0
+        }
+    }
 
     if (addDialogValues != null) {
         AddDialog(addDialogValues)
+    }
+
+    if (isTop) {
+        LaunchedEffect(list) {
+            listState.scrollToItem(0)
+        }
     }
 
     Column(
@@ -92,7 +101,10 @@ fun ShoppingListPage(
             modifier = Modifier.fillMaxWidth(),
             state = listState
         ) {
-            items(sorted) { item ->
+            items(
+                items = list,
+                key = { it.id }
+            ) { item ->
                 ShoppingItemRow(
                     item = item,
                     onClickIncrease = {
@@ -136,13 +148,3 @@ private fun ShoppingListTopAppBar(
         }
     )
 }
-
-private fun List<ShoppingItem>.sorted(): List<ShoppingItem> {
-    return sortedWith(
-        compareBy(
-            { it.checked },
-            { -it.added.time }
-        )
-    )
-}
-
