@@ -6,23 +6,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-private val initialList = listOf(
-    ShoppingItem.create(name = "Eggs", count = 10),
-    ShoppingItem.create(name = "Milk", count = 1),
-    ShoppingItem.create(name = "Potatoes", count = 4),
-    ShoppingItem.create(name = "Carrots", count = 1),
-    ShoppingItem.create(name = "Onion", count = 1),
-    ShoppingItem.create(name = "Beef", count = 1),
-    ShoppingItem.create(name = "Curry roux", count = 1),
-    ShoppingItem.create(name = "Tomato", count = 3),
-    ShoppingItem.create(name = "Cucumber", count = 1),
-    ShoppingItem.create(name = "Lettuce", count = 1),
-    ShoppingItem.create(name = "Bread", count = 2),
-    ShoppingItem.create(name = "Chicken", count = 2),
-    ShoppingItem.create(name = "Soy sauce", count = 1),
-    ShoppingItem.create(name = "Salt", count = 1),
-    ShoppingItem.create(name = "Pepper", count = 1),
-)
+private val initialList = List(100) {
+    listOf(
+        ShoppingItem.create(name = "Eggs", count = 10),
+        ShoppingItem.create(name = "Milk", count = 1),
+        ShoppingItem.create(name = "Potatoes", count = 4),
+        ShoppingItem.create(name = "Carrots", count = 1),
+        ShoppingItem.create(name = "Onion", count = 1),
+        ShoppingItem.create(name = "Beef", count = 1),
+        ShoppingItem.create(name = "Curry roux", count = 1),
+        ShoppingItem.create(name = "Tomato", count = 3),
+        ShoppingItem.create(name = "Cucumber", count = 1),
+        ShoppingItem.create(name = "Lettuce", count = 1),
+        ShoppingItem.create(name = "Bread", count = 2),
+        ShoppingItem.create(name = "Chicken", count = 2),
+        ShoppingItem.create(name = "Soy sauce", count = 1),
+        ShoppingItem.create(name = "Salt", count = 1),
+        ShoppingItem.create(name = "Pepper", count = 1),
+    )
+}.flatten()
 
 class ShoppingListViewModel : ViewModel() {
     private val _list = MutableStateFlow(initialList)
